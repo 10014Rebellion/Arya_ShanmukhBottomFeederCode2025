@@ -9,14 +9,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;jjujjjjjj
+  private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
 
   public Robot() {
     m_robotContainer = new RobotContainer();
   }
-;;lk;lk;l
+
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
