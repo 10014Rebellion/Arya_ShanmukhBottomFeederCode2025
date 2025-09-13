@@ -7,19 +7,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-
-import frc.robot.subsystems.Shooter.ShooterIntake;
-import frc.robot.subsystems.Shooter.ShooterConstants;
 import frc.robot.subsystems.Intake.Intake;
 
 public class RobotContainer {
 
-    private final CommandXboxController mDriverController = new CommandXboxController(ShooterConstants.kDriverControllerPort);
+    private final CommandXboxController mDriverController = new CommandXboxController(0);
 
-    // Subsystems
-    private final ShooterIntake mShooterIntake = new ShooterIntake();
     private final Intake mIntake = new Intake();
 
     public RobotContainer() {
@@ -27,23 +21,6 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-       
-        mDriverController.rightBumper()
-            .onTrue(
-                new ParallelCommandGroup(
-                    new InstantCommand(() -> mShooterIntake.setTopVolts(8)),
-                    new InstantCommand(() -> mShooterIntake.setMiddleVolts(8)),
-                    new InstantCommand(() -> mShooterIntake.setBottomVolts(-8))
-                )
-            )
-            .onFalse(
-                new ParallelCommandGroup(
-                    new InstantCommand(() -> mShooterIntake.setTopVolts(0)),
-                    new InstantCommand(() -> mShooterIntake.setMiddleVolts(0)),
-                    new InstantCommand(() -> mShooterIntake.setBottomVolts(0))
-                )
-            );
-
        
         mDriverController.rightTrigger()
             .whileTrue(new InstantCommand(() -> mIntake.intake(), mIntake))
