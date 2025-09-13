@@ -19,7 +19,7 @@ public class ShooterConstants {
 
     public static final MotorType kShooterMotorsType = MotorType.kBrushless;
     public static final SparkFlexConfig kShooterMotorConfig = new SparkFlexConfig();
-
+    
 
     static {
             kShooterMotorConfig.smartCurrentLimit(50).idleMode(IdleMode.kCoast);
