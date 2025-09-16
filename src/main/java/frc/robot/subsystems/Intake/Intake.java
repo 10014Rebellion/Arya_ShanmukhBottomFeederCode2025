@@ -1,56 +1,61 @@
 package frc.robot.subsystems.Intake;
 
-
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
+import com.ctre.phoenix6.hardware.CANrange;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
 
-    private final SparkMax mLeftMotor;
-    private final SparkMax mRightMotor;
-    private final DigitalInput mBeamBreak;
+    private final SparkMax mPivotMotor;
+    private final SparkMax mFlyWheelMotor;
+    private final CANrange mRangeSensor;
 
     public Intake() {
-        mLeftMotor = new SparkMax(IntakeConstants.kPivotMotorID, IntakeConstants.kMotorType);
-        mRightMotor = new SparkMax(IntakeConstants.kFlyWheelMotorID, IntakeConstants.kMotorType);
+        mPivotMotor = new SparkMax(IntakeConstants.kPivotMotorID, IntakeConstants.kMotorType);
+        mFlyWheelMotor = new SparkMax(IntakeConstants.kFlyWheelMotorID, IntakeConstants.kMotorType);
 
-        mLeftMotor.configure(IntakeConstants.kMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        mRightMotor.configure(IntakeConstants.kMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        mPivotMotor.configure(IntakeConstants.kMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        mFlyWheelMotor.configure(IntakeConstants.kMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        mBeamBreak = new DigitalInput(IntakeConstants.kBeamBreakDIOPort);
+        
+        mRangeSensor = new CANrange(IntakeConstants.kRangeSensorID);
+        
     }
 
     public void intake() {
-        mLeftMotor.setVoltage(IntakeConstants.kIntakeVolts);
-        mRightMotor.setVoltage(IntakeConstants.kIntakeVolts);
+        mPivotMotor.setVoltage(IntakeConstants.kIntakeVolts);
+        mFlyWheelMotor.setVoltage(IntakeConstants.kIntakeVolts);
     }
 
     public void outtake() {
-        mLeftMotor.setVoltage(IntakeConstants.kOuttakeVolts);
-        mRightMotor.setVoltage(IntakeConstants.kOuttakeVolts);
+        mPivotMotor.setVoltage(IntakeConstants.kOuttakeVolts);
+        mFlyWheelMotor.setVoltage(IntakeConstants.kOuttakeVolts);
     }
 
     public void hold() {
-        mLeftMotor.setVoltage(IntakeConstants.kHoldVolts);
-        mRightMotor.setVoltage(IntakeConstants.kHoldVolts);
+        mPivotMotor.setVoltage(IntakeConstants.kHoldVolts);
+        mFlyWheelMotor.setVoltage(IntakeConstants.kHoldVolts);
     }
 
     public void stop() {
-        mLeftMotor.setVoltage(0);
-        mRightMotor.setVoltage(0);
+        mPivotMotor.setVoltage(0);
+        mFlyWheelMotor.setVoltage(0);
     }
 
     public boolean hasPiece() {
-        return !mBeamBreak.get(); // beam broken = piece present
+        // Detect if a piece is within range
+        double distance = mRangeSensor.getRange();
+        return distance > 0 && distance < 20; // example threshold in cm
     }
 
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("Intake has piece", hasPiece());
+        SmartDashboard.putNumber("Intake distance", mRangeSensor.getRange());
     }
 }
