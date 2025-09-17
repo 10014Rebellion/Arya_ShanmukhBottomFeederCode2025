@@ -9,23 +9,31 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.Shooter.ShooterIntake;
+import frc.robot.subsystems.Shooter.ShooterSubsystem;
 import frc.robot.subsystems.Shooter.ShooterConstants;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 public class RobotContainer {
     private final CommandXboxController mDriverController = new CommandXboxController(ShooterConstants.kDriverControllerPort);
-    private final ShooterIntake mShooterIntake = new ShooterIntake();
-
+    private final ShooterSubsystem mShooter = new ShooterSubsystem();
 
 
   public RobotContainer() {
     
-    mDriverController.rightBumper()
-    .onTrue(
-      mShooterIntake.intakeAlgaeCmd()
+    mDriverController.leftBumper()
+    .whileTrue(
+      mShooter.intakeAlgaeCmd()
     );
 
+    mDriverController.x()
+    .whileTrue(
+      mShooter.shootAlgaeCmd()
+    );
+
+    new Trigger(() -> mShooter.hasPiece() && (!mDriverController.leftBumper().getAsBoolean()))
+      .whileTrue(mShooter.holdAlgaeCmd())
+      .whileFalse(mShooter.noPiece());
+    
     configureBindings();
 
   }
