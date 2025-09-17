@@ -17,8 +17,8 @@ public class IntakeConstants {
     public static final double kHoldVolts = 1.5;
 
    
-    public static final double kForwardLimitRotations = 0.582; 
-    public static final double kReverseLimitRotations = 0.304;  
+    public static final double kForwardLimitRotations = 7.190487; 
+    public static final double kReverseLimitRotations = 0.142858;  
 
     static {
         kMotorConfig.smartCurrentLimit(40).idleMode(IdleMode.kBrake);
