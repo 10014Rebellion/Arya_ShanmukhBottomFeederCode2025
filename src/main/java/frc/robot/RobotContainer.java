@@ -18,9 +18,14 @@ public class RobotContainer {
     private final CommandXboxController mDriverController = new CommandXboxController(ShooterConstants.kDriverControllerPort);
     private final ShooterSubsystem mShooter = new ShooterSubsystem();
 
+    private final Intake mIntake = new Intake();
 
-  public RobotContainer() {
-    new Trigger(() -> mShooter.hasPiece())
+  public RobotContainer() {    
+    configureBindings();
+  }
+
+  private void configureShooterBindings() {
+ new Trigger(() -> mShooter.hasPiece())
       .onTrue(mShooter.holdAlgaeCmd());
 
     new Trigger(() -> !mShooter.hasPiece()  && (!mDriverController.leftBumper().getAsBoolean()))
@@ -35,17 +40,30 @@ public class RobotContainer {
       .whileTrue(
         mShooter.shootAlgaeCmd()
       );
-
-    
-    configureBindings();
-
   }
 
-  private void configureBindings() {}
+  private void configureIntakeBindings() {
+        mDriverController.rightTrigger()
+            .whileTrue(new InstantCommand(() -> mIntake.intake(), mIntake))
+            .onFalse(new InstantCommand(() -> mIntake.stop(), mIntake));
 
-  public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+        mDriverController.leftTrigger()
+            .whileTrue(new InstantCommand(() -> mIntake.outtake(), mIntake))
+            .onFalse(new InstantCommand(() -> mIntake.stop(), mIntake));
+
+       
+        mDriverController.a()
+            .whileTrue(new InstantCommand(() -> mIntake.hold(), mIntake))
+            .onFalse(new InstantCommand(() -> mIntake.stop(), mIntake));
   }
 
 
+    private void configureBindings() {
+      configureIntakeBindings();
+      configureShooterBindings();
+    }
+
+    public Command getAutonomousCommand() {
+        return Commands.print("No autonomous command configured");
+    }
 }
