@@ -4,15 +4,14 @@
 
 package frc.robot;
 
-import java.util.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Shooter.ShooterSubsystem;
+import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Shooter.ShooterConstants;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 public class RobotContainer {
     private final CommandXboxController mDriverController = new CommandXboxController(ShooterConstants.kDriverControllerPort);
