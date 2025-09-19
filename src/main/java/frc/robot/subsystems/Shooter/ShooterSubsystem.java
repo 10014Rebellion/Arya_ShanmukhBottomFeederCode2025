@@ -54,23 +54,11 @@ public class ShooterSubsystem extends SubsystemBase{
 
 
     public Command intakeAlgaeCmd(){
-        return new FunctionalCommand(() -> {
-            setTopVolts(8);
-            setMiddleVolts(8);
-            setBottomVolts(8*-1);
-        }, 
-
-        () -> {}, 
-        
-        (interrupted) -> {
-            setTopVolts(0);
-            setMiddleVolts(3);
-            setBottomVolts(0);
-        }, 
-
-        () -> hasPiece(),
-
-        this);
+        return new InstantCommand(() -> {
+            setTopVolts(7);
+            setMiddleVolts(7);
+            setBottomVolts(7*-1);
+        });
     }
 
     public Command shootAlgaeCmd(){
@@ -101,7 +89,7 @@ public class ShooterSubsystem extends SubsystemBase{
         });
     }
 
-    public Command noPiece(){
+    public Command zeroCmd(){
         return new InstantCommand(() -> {
             setTopVolts(0);
             setMiddleVolts(0);

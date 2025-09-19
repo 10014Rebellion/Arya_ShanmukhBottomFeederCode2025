@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import java.util.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -19,20 +20,22 @@ public class RobotContainer {
 
 
   public RobotContainer() {
-    
-    mDriverController.leftBumper()
-    .whileTrue(
-      mShooter.intakeAlgaeCmd()
-    );
+    new Trigger(() -> mShooter.hasPiece())
+      .onTrue(mShooter.holdAlgaeCmd());
+
+    new Trigger(() -> !mShooter.hasPiece()  && (!mDriverController.leftBumper().getAsBoolean()))
+      .onTrue(mShooter.zeroCmd());
+
+    new Trigger(() -> (!mShooter.hasPiece()) && (mDriverController.leftBumper().getAsBoolean()))
+      .onTrue(mShooter.intakeAlgaeCmd())
+      .onFalse(mShooter.zeroCmd());
+  
 
     mDriverController.x()
-    .whileTrue(
-      mShooter.shootAlgaeCmd()
-    );
+      .whileTrue(
+        mShooter.shootAlgaeCmd()
+      );
 
-    new Trigger(() -> mShooter.hasPiece() && (!mDriverController.leftBumper().getAsBoolean()))
-      .whileTrue(mShooter.holdAlgaeCmd())
-      .whileFalse(mShooter.noPiece());
     
     configureBindings();
 

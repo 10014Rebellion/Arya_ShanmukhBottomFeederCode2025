@@ -14,9 +14,6 @@ public class ShooterConstants {
     public static final int kBottomShooterMotorID = 33;
     public static final int kBeamBreakDIOPort = 1;
 
-
-    public static final double kInputMultiplier = 0.5;
-
     public static final MotorType kShooterMotorsType = MotorType.kBrushless;
     public static final SparkFlexConfig kShooterMotorConfig = new SparkFlexConfig();
     
