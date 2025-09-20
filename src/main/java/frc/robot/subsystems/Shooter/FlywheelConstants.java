@@ -5,7 +5,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
 
-public class ShooterConstants {
+public class FlywheelConstants {
     public static final int kDriverControllerPort = 0;
 
     //Algae Handover Constants

@@ -9,13 +9,13 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.Shooter.ShooterSubsystem;
+import frc.robot.subsystems.Shooter.FlywheelSubsystems;
 import frc.robot.subsystems.Intake.Intake;
-import frc.robot.subsystems.Shooter.ShooterConstants;
+import frc.robot.subsystems.Shooter.FlywheelConstants;
 
 public class RobotContainer {
-    private final CommandXboxController mDriverController = new CommandXboxController(ShooterConstants.kDriverControllerPort);
-    private final ShooterSubsystem mShooter = new ShooterSubsystem();
+    private final CommandXboxController mDriverController = new CommandXboxController(FlywheelConstants.kDriverControllerPort);
+    private final FlywheelSubsystems mShooter = new FlywheelSubsystems();
 
     private final Intake mIntake = new Intake();
 

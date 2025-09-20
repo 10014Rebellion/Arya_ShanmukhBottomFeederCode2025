@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 
-public class ShooterSubsystem extends SubsystemBase{
+public class FlywheelSubsystems extends SubsystemBase{
     private final SparkFlex mTopShooterMotor;
     private final SparkFlex mMiddleShooterMotor;
     private final SparkFlex mBottomShooterMotor;
@@ -20,16 +20,16 @@ public class ShooterSubsystem extends SubsystemBase{
     private final DigitalInput mBeamBreak;
 
     
-    public ShooterSubsystem(){
-        this.mTopShooterMotor = new SparkFlex(ShooterConstants.kTopShooterMotorID, ShooterConstants.kShooterMotorsType);
-        this.mMiddleShooterMotor = new SparkFlex(ShooterConstants.kMiddleShooterMotorID, ShooterConstants.kShooterMotorsType);
-        this.mBottomShooterMotor = new SparkFlex(ShooterConstants.kBottomShooterMotorID, ShooterConstants.kShooterMotorsType);
+    public FlywheelSubsystems(){
+        this.mTopShooterMotor = new SparkFlex(FlywheelConstants.kTopShooterMotorID, FlywheelConstants.kShooterMotorsType);
+        this.mMiddleShooterMotor = new SparkFlex(FlywheelConstants.kMiddleShooterMotorID, FlywheelConstants.kShooterMotorsType);
+        this.mBottomShooterMotor = new SparkFlex(FlywheelConstants.kBottomShooterMotorID, FlywheelConstants.kShooterMotorsType);
     
-        mTopShooterMotor.configure(ShooterConstants.kShooterMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        mMiddleShooterMotor.configure(ShooterConstants.kShooterMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        mBottomShooterMotor.configure(ShooterConstants.kShooterMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        mTopShooterMotor.configure(FlywheelConstants.kShooterMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        mMiddleShooterMotor.configure(FlywheelConstants.kShooterMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        mBottomShooterMotor.configure(FlywheelConstants.kShooterMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        this.mBeamBreak = new DigitalInput(ShooterConstants.kBeamBreakDIOPort);
+        this.mBeamBreak = new DigitalInput(FlywheelConstants.kBeamBreakDIOPort);
 
     }
 
