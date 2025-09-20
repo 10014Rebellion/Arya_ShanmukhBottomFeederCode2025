@@ -10,12 +10,14 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Shooter.FlywheelSubsystems;
+import frc.robot.subsystems.Arm.ArmSubsystem;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Shooter.FlywheelConstants;
 
 public class RobotContainer {
     private final CommandXboxController mDriverController = new CommandXboxController(FlywheelConstants.kDriverControllerPort);
     private final FlywheelSubsystems mShooter = new FlywheelSubsystems();
+    private final ArmSubsystem mArm = new ArmSubsystem();
 
     private final Intake mIntake = new Intake();
 
@@ -24,8 +26,8 @@ public class RobotContainer {
   }
 
   private void configureShooterBindings() {
- new Trigger(() -> mShooter.hasPiece())
-      .onTrue(mShooter.holdAlgaeCmd());
+    new Trigger(() -> mShooter.hasPiece())
+          .onTrue(mShooter.holdAlgaeCmd());
 
     new Trigger(() -> !mShooter.hasPiece()  && (!mDriverController.leftBumper().getAsBoolean()))
       .onTrue(mShooter.zeroCmd());
@@ -38,6 +40,11 @@ public class RobotContainer {
     mDriverController.x()
       .whileTrue(
         mShooter.shootAlgaeCmd()
+      );
+
+    mDriverController.y()
+      .whileTrue(
+        mArm.setPidCmd(359)
       );
   }
 
@@ -54,7 +61,10 @@ public class RobotContainer {
         mDriverController.a()
             .whileTrue(new InstantCommand(() -> mIntake.hold(), mIntake))
             .onFalse(new InstantCommand(() -> mIntake.stop(), mIntake));
+
   }
+
+  
 
 
     private void configureBindings() {
