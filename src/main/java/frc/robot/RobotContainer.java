@@ -8,11 +8,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+
 import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Intake.IntakeConstants;
 
 public class RobotContainer {
-
-    private final CommandXboxController mDriverController = new CommandXboxController(0);
+    private final CommandXboxController mDriverController =
+        new CommandXboxController(0); // driver port (0 unless you moved it)
 
     private final Intake mIntake = new Intake();
 
@@ -21,19 +23,15 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-       
-        mDriverController.rightTrigger()
-            .whileTrue(new InstantCommand(() -> mIntake.intake(), mIntake))
-            .onFalse(new InstantCommand(() -> mIntake.stop(), mIntake));
 
-        mDriverController.leftTrigger()
-            .whileTrue(new InstantCommand(() -> mIntake.outtake(), mIntake))
-            .onFalse(new InstantCommand(() -> mIntake.stop(), mIntake));
+        mDriverController.rightBumper().onTrue(
+            new InstantCommand(() -> mIntake.setPivotSetpoint(IntakeConstants.kForwardLimitRotations))
+        );
 
        
-        mDriverController.a()
-            .whileTrue(new InstantCommand(() -> mIntake.hold(), mIntake))
-            .onFalse(new InstantCommand(() -> mIntake.stop(), mIntake));
+        mDriverController.b().onTrue(
+            new InstantCommand(() -> mIntake.setPivotSetpoint(IntakeConstants.kReverseLimitRotations))
+        );
     }
 
     public Command getAutonomousCommand() {
