@@ -5,7 +5,6 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.ctre.phoenix6.hardware.CANrange;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -15,9 +14,7 @@ public class Intake extends SubsystemBase {
     private final SparkMax mFlyWheelMotor;
     private final CANrange mRangeSensor;
 
-    private final PIDController mPivotPID;
-
-    private double mPivotSetpoint = 0.0; 
+    private double mRequestedPivotVolts = 0.0; 
 
     public Intake() {
         mPivotMotor = new SparkMax(IntakeConstants.kPivotMotorID, IntakeConstants.kMotorType);
@@ -27,20 +24,13 @@ public class Intake extends SubsystemBase {
         mFlyWheelMotor.configure(IntakeConstants.kMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         mRangeSensor = new CANrange(IntakeConstants.kRangeSensorID);
-
-      
-        mPivotPID = new PIDController(
-            IntakeConstants.kPivotP,
-            IntakeConstants.kPivotI,
-            IntakeConstants.kPivotD
-        );
-        mPivotPID.setTolerance(0.01); 
     }
 
-  
-    public void setPivotSetpoint(double rotations) {
-        mPivotSetpoint = rotations;
+
+    public void setPivotVoltage(double volts) {
+        mRequestedPivotVolts = volts;
     }
+
 
     public void intake() {
         mFlyWheelMotor.setVoltage(IntakeConstants.kIntakeVolts);
@@ -58,38 +48,32 @@ public class Intake extends SubsystemBase {
         mFlyWheelMotor.setVoltage(0);
     }
 
-  
+ 
     public boolean hasPiece() {
         double distance = mRangeSensor.getDistance().getValueAsDouble();
         return distance > 0 && distance < 20;
     }
 
-
+ 
     @Override
     public void periodic() {
         double pivotPos = mPivotMotor.getEncoder().getPosition();
+        double appliedVolts = mRequestedPivotVolts;
 
 
-        double pidOutput = mPivotPID.calculate(pivotPos, mPivotSetpoint);
-
-    
-        double appliedVolts = Math.max(Math.min(pidOutput, 8.0), -8.0);
-
-    
         if (pivotPos >= IntakeConstants.kForwardLimitRotations && appliedVolts > 0) {
-            appliedVolts = 0;
+            appliedVolts = 0; 
         }
         if (pivotPos <= IntakeConstants.kReverseLimitRotations && appliedVolts < 0) {
-            appliedVolts = 0;
+            appliedVolts = 0; 
         }
 
         mPivotMotor.setVoltage(appliedVolts);
 
- 
+
         SmartDashboard.putBoolean("Intake has piece", hasPiece());
         SmartDashboard.putNumber("Intake distance", mRangeSensor.getDistance().getValueAsDouble());
         SmartDashboard.putNumber("Pivot Encoder Pos", pivotPos);
         SmartDashboard.putNumber("Pivot Applied Volts", appliedVolts);
-        SmartDashboard.putNumber("Pivot Setpoint", mPivotSetpoint);
     }
 }

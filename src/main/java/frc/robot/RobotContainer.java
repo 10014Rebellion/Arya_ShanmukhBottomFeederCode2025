@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,7 +10,7 @@ import frc.robot.subsystems.Intake.IntakeConstants;
 
 public class RobotContainer {
     private final CommandXboxController mDriverController =
-        new CommandXboxController(0); // driver port (0 unless you moved it)
+        new CommandXboxController(0); 
 
     private final Intake mIntake = new Intake();
 
@@ -23,15 +19,15 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
+    
+        mDriverController.rightBumper()
+            .onTrue(new InstantCommand(() -> mIntake.setPivotVoltage(+6))) /
+            .onFalse(new InstantCommand(() -> mIntake.setPivotVoltage(0)));
 
-        mDriverController.rightBumper().onTrue(
-            new InstantCommand(() -> mIntake.setPivotSetpoint(IntakeConstants.kForwardLimitRotations))
-        );
-
-       
-        mDriverController.b().onTrue(
-            new InstantCommand(() -> mIntake.setPivotSetpoint(IntakeConstants.kReverseLimitRotations))
-        );
+     
+        mDriverController.b()
+            .onTrue(new InstantCommand(() -> mIntake.setPivotVoltage(-6))) 
+            .onFalse(new InstantCommand(() -> mIntake.setPivotVoltage(0)));
     }
 
     public Command getAutonomousCommand() {
