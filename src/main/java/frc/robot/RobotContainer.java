@@ -44,7 +44,7 @@ public class RobotContainer {
 
     mDriverController.y()
       .whileTrue(
-        mArm.setPidCmd(359)
+        mArm.setPidCmd(45)
       );
   }
 
