@@ -31,7 +31,7 @@ public class Intake extends SubsystemBase {
         mRequestedPivotVolts = volts;
     }
 
-    
+
 
     public void intake() {
         mFlyWheelMotor.setVoltage(IntakeConstants.kIntakeVolts);
@@ -49,6 +49,10 @@ public class Intake extends SubsystemBase {
         mFlyWheelMotor.setVoltage(0);
     }
 
+    public void stop() {
+        mFlyWheelMotor.setVoltage(0);
+        mPivotMotor.setVoltage(0);
+    }
  
     public boolean hasPiece() {
         double distance = mRangeSensor.getDistance().getValueAsDouble();
@@ -79,8 +83,5 @@ public class Intake extends SubsystemBase {
     }
 
 
-    public Object stop() {
-        
-        throw new UnsupportedOperationException("Unimplemented method 'stop'");
-    }
+    
 }
