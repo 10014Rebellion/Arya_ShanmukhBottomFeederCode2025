@@ -31,6 +31,7 @@ public class Intake extends SubsystemBase {
         mRequestedPivotVolts = volts;
     }
 
+    
 
     public void intake() {
         mFlyWheelMotor.setVoltage(IntakeConstants.kIntakeVolts);
@@ -75,5 +76,11 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("Intake distance", mRangeSensor.getDistance().getValueAsDouble());
         SmartDashboard.putNumber("Pivot Encoder Pos", pivotPos);
         SmartDashboard.putNumber("Pivot Applied Volts", appliedVolts);
+    }
+
+
+    public Object stop() {
+        
+        throw new UnsupportedOperationException("Unimplemented method 'stop'");
     }
 }

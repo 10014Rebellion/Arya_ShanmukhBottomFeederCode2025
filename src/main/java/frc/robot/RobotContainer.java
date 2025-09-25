@@ -20,8 +20,23 @@ public class RobotContainer {
 
     private void configureBindings() {
     
+        
+        mDriverController.rightTrigger()
+        .whileTrue(new InstantCommand(() -> mIntake.intake(), mIntake))
+        .onFalse(new InstantCommand(() -> mIntake.stop(), mIntake));
+
+        mDriverController.leftTrigger()
+        .whileTrue(new InstantCommand(() -> mIntake.outtake(), mIntake))
+        .onFalse(new InstantCommand(() -> mIntake.stop(), mIntake));
+
+
+        mDriverController.a()
+            .whileTrue(new InstantCommand(() -> mIntake.hold(), mIntake))
+            .onFalse(new InstantCommand(() -> mIntake.stop(), mIntake));
+    
+        
         mDriverController.rightBumper()
-            .onTrue(new InstantCommand(() -> mIntake.setPivotVoltage(+6))) /
+            .onTrue(new InstantCommand(() -> mIntake.setPivotVoltage(+6))) 
             .onFalse(new InstantCommand(() -> mIntake.setPivotVoltage(0)));
 
      
