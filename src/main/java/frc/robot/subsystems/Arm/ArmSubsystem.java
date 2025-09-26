@@ -25,10 +25,9 @@ public class ArmSubsystem extends SubsystemBase {
         ArmConstants.kP,
         ArmConstants.kI,
         ArmConstants.kD,
-        new Constraints(500, 500)
+        new Constraints(1000, 1200)
       );
 
-      controller.enableContinuousInput(0, 360); //keeps it in circular motion; makes it so that the robot takes the shortest path(if robot is at 180 and needs to go to 90 instad of going forward until 90 it js goes back)
       this.mArmMotor = new SparkMax(ArmConstants.kArmMotorID, ArmConstants.kArmMotorType);
       mArmMotor.configure(ArmConstants.kArmMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -48,12 +47,17 @@ public class ArmSubsystem extends SubsystemBase {
     
     return new FunctionalCommand(
       ()-> {
-        controller.setGoal(pSetPoint); //assigns setpoint value to controller
+        controller.setGoal(pSetPoint); 
+        controller.reset(mArmEncoder.getPosition());
       },
 
       ()-> {
         double calculatedPID = controller.calculate(getEncoderReading()); //calculating what to apply to motor using encoder reading
         SmartDashboard.putNumber("Arm/Calculated output", calculatedPID); 
+        SmartDashboard.putNumber("Arm/Goal", pSetPoint);
+        SmartDashboard.putNumber("Arm/kP", ArmConstants.kP);
+        SmartDashboard.putNumber("Arm/kD", ArmConstants.kP);
+        
         setMotorVoltage(calculatedPID); //setting motor voltage as whatever we get from calculation
       },
 
@@ -82,6 +86,6 @@ public class ArmSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("Arm/Bus Voltage", mArmMotor.getBusVoltage());
       SmartDashboard.putNumber("Arm/Temperature", mArmMotor.getMotorTemperature());
 
-      
+
   }
 }
