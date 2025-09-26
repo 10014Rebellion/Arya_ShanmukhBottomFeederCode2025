@@ -2,16 +2,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import frc.robot.subsystems.Intake.Intake;
-import frc.robot.subsystems.Intake.IntakeConstants;
 
 public class RobotContainer {
-    private final CommandXboxController mDriverController =
-        new CommandXboxController(0); 
-
+    private final CommandXboxController mDriverController = new CommandXboxController(0);
     private final Intake mIntake = new Intake();
 
     public RobotContainer() {
@@ -19,30 +17,25 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-    
-        
         mDriverController.rightTrigger()
-        .whileTrue(new InstantCommand(() -> mIntake.intake(), mIntake))
-        .onFalse(new InstantCommand(() -> mIntake.stop(), mIntake));
+            .whileTrue(new RunCommand(() -> mIntake.intake(), mIntake))
+            .onFalse(new InstantCommand(() -> mIntake.stopPivotAndFlywheels(), mIntake));
 
         mDriverController.leftTrigger()
-        .whileTrue(new InstantCommand(() -> mIntake.outtake(), mIntake))
-        .onFalse(new InstantCommand(() -> mIntake.stop(), mIntake));
-
+            .whileTrue(new RunCommand(() -> mIntake.outtake(), mIntake))
+            .onFalse(new InstantCommand(() -> mIntake.stopPivotAndFlywheels(), mIntake));
 
         mDriverController.a()
-            .whileTrue(new InstantCommand(() -> mIntake.hold(), mIntake))
-            .onFalse(new InstantCommand(() -> mIntake.stop(), mIntake));
-    
-        
-        mDriverController.rightBumper()
-            .onTrue(new InstantCommand(() -> mIntake.setPivotVoltage(+6))) 
-            .onFalse(new InstantCommand(() -> mIntake.setPivotVoltage(0)));
+            .whileTrue(new RunCommand(() -> mIntake.hold(), mIntake))
+            .onFalse(new InstantCommand(() -> mIntake.stopPivotAndFlywheels(), mIntake));
 
-     
+        mDriverController.rightBumper()
+            .whileTrue(new RunCommand(() -> mIntake.pivotUp(), mIntake))
+            .onFalse(new InstantCommand(() -> mIntake.stopPivotAndFlywheels(), mIntake));
+
         mDriverController.b()
-            .onTrue(new InstantCommand(() -> mIntake.setPivotVoltage(-6))) 
-            .onFalse(new InstantCommand(() -> mIntake.setPivotVoltage(0)));
+            .whileTrue(new RunCommand(() -> mIntake.pivotDown(), mIntake))
+            .onFalse(new InstantCommand(() -> mIntake.stopPivotAndFlywheels(), mIntake));
     }
 
     public Command getAutonomousCommand() {
